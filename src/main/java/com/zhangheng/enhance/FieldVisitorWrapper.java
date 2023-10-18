@@ -13,7 +13,6 @@ import java.util.Set;
 public class FieldVisitorWrapper implements AsmVisitorWrapper.ForDeclaredFields.FieldVisitorWrapper {
 
 
-
     private final Set<String> env;
 
     public FieldVisitorWrapper(String... env) {
@@ -23,8 +22,6 @@ public class FieldVisitorWrapper implements AsmVisitorWrapper.ForDeclaredFields.
     public FieldVisitorWrapper(Set<String> env) {
         this.env = Set.copyOf(env);
     }
-
-
 
 
     /**
@@ -37,9 +34,11 @@ public class FieldVisitorWrapper implements AsmVisitorWrapper.ForDeclaredFields.
      */
     @Override
     @SuppressWarnings("DuplicatedCode")
-    public FieldVisitor wrap(TypeDescription instrumentedType, FieldDescription.InDefinedShape fieldDescription, FieldVisitor fieldVisitor) {
+    public FieldVisitor wrap(TypeDescription instrumentedType, FieldDescription.InDefinedShape fieldDescription,
+                             FieldVisitor fieldVisitor) {
 
-        final Map<String, ModularLoadModel> cache = ClassVisitorWrapper.handleTypeDescription(fieldDescription.getDeclaredAnnotations());
+        final Map<String, ModularLoadModel> cache =
+                ClassVisitorWrapper.handleTypeDescription(fieldDescription.getDeclaredAnnotations());
         if (cache.isEmpty())
             return fieldVisitor;
 
@@ -49,6 +48,7 @@ public class FieldVisitorWrapper implements AsmVisitorWrapper.ForDeclaredFields.
                 if (cache.containsKey(descriptor) && cache.get(descriptor).isIntersection(env)) {
                     return null;
                 }
+
                 return super.visitAnnotation(descriptor, visible);
             }
         };

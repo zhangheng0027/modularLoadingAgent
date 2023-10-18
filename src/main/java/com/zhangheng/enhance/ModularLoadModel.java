@@ -18,7 +18,11 @@ public class ModularLoadModel {
     public Set<String> environment = new HashSet<>();
 
 
-    // 判断 是否有交集
+    /**
+     * 判断是否有交集
+     * @param set 注解所依赖的环境
+     * @return true 无交集
+     */
     public boolean isIntersection(Set<String> set) {
         for (String s : set) {
             if (environment.contains(s)) {

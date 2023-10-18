@@ -15,6 +15,11 @@ public class ModularEnhanceClassFileTransformer implements AgentBuilder.Transfor
 
     private final Set<String> modularLoadSet;
 
+
+    public ModularEnhanceClassFileTransformer(Set<String> ms) {
+        modularLoadSet = Set.copyOf(ms);
+    }
+
     public ModularEnhanceClassFileTransformer(String... ms) {
         modularLoadSet = Set.of(ms);
     }
@@ -34,9 +39,9 @@ public class ModularEnhanceClassFileTransformer implements AgentBuilder.Transfor
                                             ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
 
         AsmVisitorWrapper.Compound compound = new AsmVisitorWrapper.Compound(
-                new ClassVisitorWrapper(modularLoadSet)  // 类访问器
-//                new AsmVisitorWrapper.ForDeclaredFields().field(ElementMatchers.any(), new FieldVisitorWrapper(modularLoadSet)), // 字段访问器
-//                new AsmVisitorWrapper.ForDeclaredMethods().method(ElementMatchers.any(), new MethodVisitorWrapper(modularLoadSet)) // 方法访问器
+                new ClassVisitorWrapper(modularLoadSet),  // 类访问器
+                new AsmVisitorWrapper.ForDeclaredFields().field(ElementMatchers.any(), new FieldVisitorWrapper(modularLoadSet)), // 字段访问器
+                new AsmVisitorWrapper.ForDeclaredMethods().method(ElementMatchers.any(), new MethodVisitorWrapper(modularLoadSet)) // 方法访问器
         );
 
         return builder.visit(compound);
